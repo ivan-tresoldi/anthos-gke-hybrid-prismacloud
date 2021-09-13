@@ -21,6 +21,6 @@ resource "google_compute_instance" "instances" {
     network = google_compute_network.vpc.name
     subnetwork = google_compute_subnetwork.subnet.name
 
-  metadata_startup_script  = "${file("./prerequisite.sh")}"
+  metadata_startup_script  = "${file("./prerequisites.sh")}"
 }
 }
