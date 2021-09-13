@@ -35,3 +35,16 @@ variable "image_family" {
   default = "ubuntu-2004-lts"
   description = "Image family"
 }
+
+variable "instances" {
+  default = "2"
+  description = "Number of requested instances"
+}
+
+variable "ssh_user" {
+  default = "admin"
+}
+
+variable "ssh_pub_key_file" {
+  default = "ssh-key.pub"
+}

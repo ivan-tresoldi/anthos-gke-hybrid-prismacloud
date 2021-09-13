@@ -22,5 +22,11 @@ resource "google_compute_instance" "instances" {
     subnetwork = google_compute_subnetwork.subnet.name
 
   metadata_startup_script  = "${file("./prerequisites.sh")}"
+  }
 }
+
+resource "google_compute_project_metadata_item" "ssh-keys" {
+  project     = var.project_id
+  key   = "ssh-keys"
+  value = "${var.ssh_user}:${file(var.ssh_pub_key_file)}"
 }

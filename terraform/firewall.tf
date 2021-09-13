@@ -1,10 +1,9 @@
 resource "google_compute_firewall" "fw-rules" {
-  name    = "itresoldi-firewall"
+  name    = "${google_compute_network.vpc.name}-fwrules"
   network = google_compute_network.vpc.name
 
   allow {
     protocol = "tcp"
-    direction = INGRESS
     ports    = ["22", "80", "443"]
   }
 
