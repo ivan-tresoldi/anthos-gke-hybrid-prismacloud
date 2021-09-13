@@ -4,8 +4,6 @@ data "google_compute_image" "image" {
   project = "${var.image_family}"
 }
 
-count = 2
-
 resource "google_compute_instance" "instances" {
   count                     = length(var.instances)
   name                      = "${var.project_name}-itresoldi-${count.index}"
@@ -23,5 +21,6 @@ resource "google_compute_instance" "instances" {
     network = google_compute_network.vpc.name
     subnetwork = google_compute_subnetwork.subnet.name
 
-  metadata_startup_script  = "${file("./start.sh")}"
+  metadata_startup_script  = "${file("./prerequisite.sh")}"
+}
 }
