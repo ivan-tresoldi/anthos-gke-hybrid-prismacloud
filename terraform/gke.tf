@@ -18,7 +18,8 @@ resource "google_container_node_pool" "primary_nodes" {
   name       = "${google_container_cluster.primary.name}-np"
   location   = var.region
   cluster    = google_container_cluster.primary.name
-  node_count = var.gke_num_nodes
+  min_count  = 1
+  max_count  = 2
 
   node_config {
     oauth_scopes = [

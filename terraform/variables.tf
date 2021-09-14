@@ -23,7 +23,7 @@ variable "gke_password" {
 }
 
 variable "gke_num_nodes" {
-  default     = "2"
+  default     = 2
   description = "number of gke nodes"
 }
 
@@ -48,6 +48,6 @@ variable "image_project" {
 }
 
 variable "num_instances" {
-  default = "2"
+  default = 2
   description = "Number of requested instances"
 }
