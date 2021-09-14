@@ -8,7 +8,7 @@ resource "google_compute_instance" "instances" {
   count                     = length(var.instances)
   name                      = "${var.project_id}-itresoldi-${count.index}"
   machine_type = "${var.machine_type}"
-  zone         = "${var.region}"
+  zone         = "${var.zone}"
   allow_stopping_for_update = true
 
   boot_disk {

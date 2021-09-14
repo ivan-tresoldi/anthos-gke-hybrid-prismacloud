@@ -3,7 +3,13 @@ variable "project_id" {
 }
 
 variable "region" {
+  default = "europe-west3"
   description = "region"
+}
+
+variable "zone" {
+  default = "europe-west3-a"
+  description = "zone"
 }
 
 variable "gke_username" {
