@@ -17,10 +17,3 @@ output "kubernetes_cluster_host" {
   value       = google_container_cluster.primary.endpoint
   description = "GKE Cluster Host"
 }
-
-output "instances_ip_addresses" {
- value = {
-      for instance in google_compute_instance.instances:
-        instance.instance_id => webserver.network_interface.0.access_config.0.nat_ip
-   }
-}
