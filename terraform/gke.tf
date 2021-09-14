@@ -1,7 +1,7 @@
 # GKE cluster
 resource "google_container_cluster" "primary" {
   name     = "${var.project_id}-itresoldi-gke"
-  location = var.region
+  location = "${var.zone}"
   
   # We can't create a cluster with no node pool defined, but we want to only use
   # separately managed node pools. So we create the smallest possible default
@@ -16,7 +16,7 @@ resource "google_container_cluster" "primary" {
 # Separately Managed Node Pool
 resource "google_container_node_pool" "primary_nodes" {
   name       = "${google_container_cluster.primary.name}-np"
-  location   = var.region
+  location   = "${var.zone}"
   cluster    = google_container_cluster.primary.name
   node_count  = 2
 

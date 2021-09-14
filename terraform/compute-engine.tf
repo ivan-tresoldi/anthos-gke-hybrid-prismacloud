@@ -5,7 +5,7 @@ data "google_compute_image" "image" {
 }
 
 resource "google_compute_instance" "instances" {
-  count                     = length(var.num_instances)
+  count                     = 2
   name                      = "${var.project_id}-itresoldi-${count.index}"
   machine_type = "${var.machine_type}"
   zone         = "${var.zone}"
