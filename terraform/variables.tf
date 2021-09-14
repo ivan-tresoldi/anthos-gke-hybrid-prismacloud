@@ -36,6 +36,11 @@ variable "image_family" {
   description = "Image family"
 }
 
+variable "image_project" {
+  default = "ubuntu-os-cloud"
+  description = "Image Project"
+}
+
 variable "instances" {
   default = "2"
   description = "Number of requested instances"

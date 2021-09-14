@@ -1,7 +1,8 @@
 
 data "google_compute_image" "image" {
   name    = "${var.image_name}"
-  project = "${var.image_family}"
+  family  = "${var.image_family}"
+  project = "${var.image_project}"
 }
 
 resource "google_compute_instance" "instances" {
