@@ -1,7 +1,6 @@
 
 data "google_compute_image" "image" {
   name    = "${var.image_name}"
-  family  = "${var.image_family}"
   project = "${var.image_project}"
 }
 
