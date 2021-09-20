@@ -1,8 +1,5 @@
 #!/bin/bash -l
 
-# Set default Environment Variables
-source $WORK_DIR/build_vars
-
 #export KUBECONFIG=$WORK_DIR/kubeconfig
 
 CHECKSVC=$(kubectl get svc -n evil|grep evil)

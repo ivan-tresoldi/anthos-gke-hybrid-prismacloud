@@ -21,8 +21,7 @@ steps:
         name: "bash"
         args:
         - -c
-        - source /workspace/build_vars &&
-        - cd $$WORK_DIR &&
+        - source ./build_vars &&
         - git clone $$REPO_URL
 
       - id: Run Bridgecrew/Checkov IaC scanning
@@ -30,15 +29,15 @@ steps:
         entrypoint: /bin/bash
         args:
         - -c
-        - source /workspace/build_vars &&
-        - checkov --bc-api-key $$BRIDGECREW_API_KEY --directory $$WORK_DIR/$$LOCAL_REPO_DIR --soft_fail true --framework {kubernetes, terraform}
+        - source ./build_vars &&
+        - checkov --bc-api-key $$BRIDGECREW_API_KEY --directory $$LOCAL_REPO_DIR --soft_fail true --framework {kubernetes, terraform}
         secretEnv: ['BRIDGECREW_API_KEY']
 
       - id: twistcli download and store in workspace
         name: 'bash'
         args:
         - -c
-        - source /workspace/build_vars &&
+        - source ./build_vars &&
         - curl -s -k -u $$TL_USER:$$TL_PASS "https://$$TL_CONSOLE/api/v1/util/twistcli" -v -o $$TWISTCLI_PATH/twistcli;chmod +x $$TWISTCLI_PATH/twistcli
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
@@ -46,75 +45,75 @@ steps:
         name: 'bash'
         args:
         - -c
-        - source /workspace/build_vars &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/repoScan.sh
+        - source ./build_vars &&
+        - $$LOCAL_REPO_DIR/files/repoScan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: OSS License Check 
         name: 'bash'
         args:
         - -c
-        - source /workspace/build_vars &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/licenseCheck.sh
+        - source ./build_vars &&
+        - $$LOCAL_REPO_DIR/files/licenseCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
         name: 'bash'
         args:
         - -c
-        - source /workspace/build_vars &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/addPolicies.sh
+        - source ./build_vars &&
+        - $$LOCAL_REPO_DIR/files/addPolicies.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Scan Image for vulnerabilities
         name: 'bash'
         args:
         - -c
-        - source /workspace/build_vars &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/scanImage.sh
+        - source ./build_vars &&
+        - $$LOCAL_REPO_DIR/files/scanImage.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
      
       - id: Scan Image for Malware using Wildfire
         name: 'bash'
         args:
         - -c
-        - source /workspace/build_vars &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/malwareCheck.sh
+        - source ./build_vars &&
+        - $$LOCAL_REPO_DIR/files/malwareCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Sandbox Runtime Scanning of Image       
         name: 'bash'
         args:
         - -c
-        - source /workspace/build_vars &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/sandboxscan.sh
+        - source ./build_vars &&
+        - $$LOCAL_REPO_DIR/files/sandboxscan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
        
       - id: Deploy Application   
         name: 'gcr.io/cloud-builders/gcloud'
         args:
         - -c
-        - source /workspace/build_vars &&
+        - source ./build_vars &&
         - gcloud container clusters get-credentials $$K8S_CLUSTER= --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/deploy.sh
+        - $$LOCAL_REPO_DIR/files/deploy.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
        
       - id: Execute Runtime attacks 
         name: 'gcr.io/cloud-builders/gcloud'
         args:
         - -c
-        - source /workspace/build_vars &&
+        - source ./build_vars &&
         - gcloud container clusters get-credentials $$K8S_CLUSTER= --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/runtime_attacks.sh
+        - $$LOCAL_REPO_DIR/files/runtime_attacks.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
          
       - id: Execute WAAS attacks 
         name: 'gcr.io/cloud-builders/gcloud'
         args:
         - -c
-        - source /workspace/build_vars &&
+        - source ./build_vars &&
         - gcloud container clusters get-credentials $$K8S_CLUSTER= --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
-        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/waas_attacks.sh
+        - $$LOCAL_REPO_DIR/files/waas_attacks.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
 availableSecrets:

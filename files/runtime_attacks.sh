@@ -1,8 +1,5 @@
 #!/bin/bash -l
 
-# Set default Environment Variables
-source $WORK_DIR/build_vars
-
 #export KUBECONFIG=$WORK_DIR/kubeconfig
 
 PO=$(kubectl get po -n evil|grep evil| awk '{ print $1 }')

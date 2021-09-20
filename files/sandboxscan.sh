@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Set default Environment Variables
-source $WORK_DIR/build_vars
-
-$TWISTCLI_PATH/twistcli sandbox -u $TL_USER -p $TL_PASS --address https://$TL_CONSOLE --output-file "sandbox.json" --analysis-duration 1m itresoldi/evilpetclinic:latest
+./twistcli sandbox -u $TL_USER -p $TL_PASS --address https://$TL_CONSOLE --output-file "sandbox.json" --analysis-duration 1m itresoldi/evilpetclinic:latest
 
 status=$?
 echo "Exit status is:"
