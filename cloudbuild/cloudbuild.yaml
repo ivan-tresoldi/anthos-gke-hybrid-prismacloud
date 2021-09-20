@@ -22,8 +22,8 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - cd $WORK_DIR &&
-        - git clone $REPO_URL
+        - cd $$WORK_DIR &&
+        - git clone $$REPO_URL
 
       - id: Run Bridgecrew/Checkov IaC scanning
         name: 'bridgecrew/checkov:latest'
@@ -31,7 +31,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - checkov --bc-api-key $BRIDGECREW_API_KEY --directory $WORK_DIR/$LOCAL_REPO_DIR --soft_fail true --framework {kubernetes, terraform}
+        - checkov --bc-api-key $$BRIDGECREW_API_KEY --directory $$WORK_DIR/$$LOCAL_REPO_DIR --soft_fail true --framework {kubernetes, terraform}
         secretEnv: ['BRIDGECREW_API_KEY']
 
       - id: twistcli download and store in workspace
@@ -39,7 +39,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - curl -s -k -u $TL_USER:$TL_PASS "https://$TL_CONSOLE/api/v1/util/twistcli" -v -o $TWISTCLI_PATH/twistcli;chmod +x $TWISTCLI_PATH/twistcli
+        - curl -s -k -u $$TL_USER:$$TL_PASS "https://$$TL_CONSOLE/api/v1/util/twistcli" -v -o $$TWISTCLI_PATH/twistcli;chmod +x $$TWISTCLI_PATH/twistcli
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Repo Vulnerability scan
@@ -47,7 +47,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - $WORK_DIR/$LOCAL_REPO_DIR/files/repoScan.sh
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/repoScan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: OSS License Check 
@@ -55,7 +55,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - WORK_DIR/$LOCAL_REPO_DIR/files/licenseCheck.sh
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/licenseCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
@@ -63,7 +63,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - WORK_DIR/$LOCAL_REPO_DIR/files/addPolicies.sh
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/addPolicies.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Scan Image for vulnerabilities
@@ -71,7 +71,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - WORK_DIR/$LOCAL_REPO_DIR/files/scanImage.sh
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/scanImage.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
      
       - id: Scan Image for Malware using Wildfire
@@ -79,7 +79,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - WORK_DIR/$LOCAL_REPO_DIR/files/malwareCheck.sh
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/malwareCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Sandbox Runtime Scanning of Image       
@@ -87,7 +87,7 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - WORK_DIR/$LOCAL_REPO_DIR/files/sandboxscan.sh
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/sandboxscan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
        
       - id: Deploy Application   
@@ -95,8 +95,8 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - gcloud container clusters get-credentials $K8S_CLUSTER= --zone $CLUSTER_ZONE --project $PROJECT_ID &&
-        - WORK_DIR/$LOCAL_REPO_DIR/files/deploy.sh
+        - gcloud container clusters get-credentials $$K8S_CLUSTER= --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/deploy.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
        
       - id: Execute Runtime attacks 
@@ -104,8 +104,8 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - gcloud container clusters get-credentials $K8S_CLUSTER= --zone $CLUSTER_ZONE --project $PROJECT_ID &&
-        - $WORK_DIR/$LOCAL_REPO_DIR/files/runtime_attacks.sh
+        - gcloud container clusters get-credentials $$K8S_CLUSTER= --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/runtime_attacks.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
          
       - id: Execute WAAS attacks 
@@ -113,8 +113,8 @@ steps:
         args:
         - -c
         - source /workspace/build_vars &&
-        - gcloud container clusters get-credentials $K8S_CLUSTER= --zone $CLUSTER_ZONE --project $PROJECT_ID &&
-        - $WORK_DIR/$LOCAL_REPO_DIR/files/waas_attacks.sh
+        - gcloud container clusters get-credentials $$K8S_CLUSTER= --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
+        - $$WORK_DIR/$$LOCAL_REPO_DIR/files/waas_attacks.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
 availableSecrets:
