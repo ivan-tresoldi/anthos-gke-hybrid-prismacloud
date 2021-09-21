@@ -15,7 +15,8 @@ steps:
           export LOCAL_REPO_DIR=${REPO_URL##*/} &&
           export K8S_CLUSTER="central" &&
           export CLUSTER_ZONE="us-central1-b" &&
-          env > build_vars
+          env > build_vars &&
+          echo build_vars
 
       - id: Clone Code Repo to local Workspace
         name: 'gcr.io/cloud-builders/gcloud'
