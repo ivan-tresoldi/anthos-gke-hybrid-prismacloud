@@ -15,8 +15,7 @@ steps:
           export LOCAL_REPO_DIR=${REPO_URL##*/} &&
           export K8S_CLUSTER="central" &&
           export CLUSTER_ZONE="us-central1-b" &&
-          env > build_vars &&
-          echo build_vars
+          env > build_vars
 
       - id: Clone Code Repo to local Workspace
         name: 'gcr.io/cloud-builders/gcloud'
@@ -45,6 +44,9 @@ steps:
         - -c
         - |
           source build_vars &&
+          echo "$$TL_USER" &&
+          echo "$$TL_PASS" &&
+          echo "$$TL_CONSOLE" &&
           curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o $$TWISTCLI_PATH/twistcli;chmod +x $$TWISTCLI_PATH/twistcli
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
