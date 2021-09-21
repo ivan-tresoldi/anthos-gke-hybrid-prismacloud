@@ -1,4 +1,4 @@
-#!/bin/bash
+$TL_CONSOLE$TL_CONSOLE#!/bin/bash
 
 ./twistcli sandbox -u $TL_USER -p $TL_PASS --address https://$TL_CONSOLE --output-file "sandbox.json" --analysis-duration 1m itresoldi/evilpetclinic:latest
 

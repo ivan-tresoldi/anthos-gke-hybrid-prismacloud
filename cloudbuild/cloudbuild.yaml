@@ -25,7 +25,8 @@ steps:
         - -c
         - |
           source build_vars &&
-          git clone "$$REPO_URL"
+          git clone "$$REPO_URL" &&
+          chomod +x $LOCAL_REPO_DIR/files/
 
       - id: Run Bridgecrew/Checkov IaC scanning
         name: 'bridgecrew/checkov:latest'

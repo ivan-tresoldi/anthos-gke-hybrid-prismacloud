@@ -1,4 +1,4 @@
-#!/bin/bash
+$TL_CONSOLE$TL_CONSOLE#!/bin/bash
 
 docker pull itresoldi/evilpetclinic:latest     
 
