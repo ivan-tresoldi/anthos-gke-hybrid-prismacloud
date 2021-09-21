@@ -18,24 +18,16 @@ steps:
           env > build_vars &&
           echo build_vars
 
-      - id: "Read Values"
-        name: gcr.io/cloud-builders/git
-        entrypoint: /bin/bash
-        args:
-        - -c
-        - |
-          # Read from "/workspace"
-          echo "Saved Variables:" $(cat /workspace/build_vars)
 
       - id: Clone Code Repo to local Workspace
         name: 'gcr.io/cloud-builders/gcloud'
         entrypoint: "bash"
         args:
         - -c
-        - source ./build_vars &&
-        - echo "$$LOCAL_REPO_DIR" &&
-        - echo "$$REPO_URL" &&
-        - git clone "$$REPO_URL"
+        - |
+          source build_vars &&
+          echo "Saved Variables:" $(cat build_vars) &&
+          git clone "$$REPO_URL"
 
       - id: Run Bridgecrew/Checkov IaC scanning
         name: 'bridgecrew/checkov:latest'
