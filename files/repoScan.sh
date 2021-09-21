@@ -8,7 +8,7 @@ echo "$REPO_DIR"
 echo "$result"
 echo "$BYPASS_REPOSCAN"
 
-if [ "$result" = "true" ] || [ $BYPASS_REPOSCAN = 1 ]; then
+if [ "$result" = "true" ] || [ $BYPASS_REPOSCAN = "1" ]; then
    echo "Code Repo scan passed!"
    exit 0
 else
