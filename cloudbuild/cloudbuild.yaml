@@ -44,7 +44,8 @@ steps:
         - -c
         - |
           source build_vars &&
-          curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o $$TWISTCLI_PATH/twistcli;chmod +x $$TWISTCLI_PATH/twistcli
+          curl $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o $$TWISTCLI_PATH/twistcli;chmod +x $$TWISTCLI_PATH/twistcli &&
+          curl "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64" -o jq;chmod +x jq &&
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Repo Vulnerability scan
@@ -54,7 +55,6 @@ steps:
         - -c
         - |
           source build_vars &&
-          curl -s -k -u "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64" -v -o ./jq;chmod +x ./jq &&
           $$LOCAL_REPO_DIR/files/repoScan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
