@@ -34,7 +34,7 @@ steps:
         - -c
         - |
           source build_vars &&
-          checkov --bc-api-key $$BRIDGECREW_API_KEY --directory $$LOCAL_REPO_DIR --soft_fail true --framework {kubernetes, terraform}
+          checkov --bc-api-key $$BRIDGECREW_API_KEY --directory $$LOCAL_REPO_DIR --soft_fail true --framework all
         secretEnv: ['BRIDGECREW_API_KEY']
 
       - id: twistcli download and store in workspace
