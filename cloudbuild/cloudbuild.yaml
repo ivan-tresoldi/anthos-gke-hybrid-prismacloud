@@ -78,7 +78,7 @@ steps:
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Scan Image for vulnerabilities
-        nname: 'gcr.io/cloud-builders/gcloud'
+        name: 'gcr.io/cloud-builders/gcloud'
         entrypoint: "bash"
         args:
         - -c
