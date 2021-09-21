@@ -44,9 +44,6 @@ steps:
         - -c
         - |
           source build_vars &&
-          echo "$$TL_USER" &&
-          echo "$$TL_PASS" &&
-          echo "$$TL_CONSOLE" &&
           curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o $$TWISTCLI_PATH/twistcli;chmod +x $$TWISTCLI_PATH/twistcli
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
@@ -61,8 +58,7 @@ steps:
           chmod +x ./jq &&
           ./twistcli -v > twistcli_version &&
           cat twistcli_version
-          cat build_vars &&
-          [./$$LOCAL_REPO_DIR/files/repoScan.sh]
+          /workspace/$$LOCAL_REPO_DIR/files/repoScan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: OSS License Check 
