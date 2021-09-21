@@ -18,6 +18,15 @@ steps:
           env > build_vars &&
           echo build_vars
 
+      - id: "Read Values"
+        name: gcr.io/cloud-builders/git
+        entrypoint: /bin/bash
+        args:
+        - -c
+        - |
+          # Read from "/workspace"
+          echo "Saved Variables:" $(cat /workspace/build_vars)
+
       - id: Clone Code Repo to local Workspace
         name: 'gcr.io/cloud-builders/gcloud'
         entrypoint: "bash"
