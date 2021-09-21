@@ -14,7 +14,7 @@ SVC=$(kubectl get svc -n evil|grep evil| awk '{ print $3 }')
 
 echo "testing SQLi attack"
 curl $SVC?id=%25%27+and+1%3D0+union+select+null%2C+table_name+from+information_schema.tables+%23&Submit=Submit
-if test "$status" == "0"; then
+if test "$status" = "0"; then
    echo "No error code. Is WAAS configured properly?"
 else
    echo "Test exited WAAS protection with error code $status"

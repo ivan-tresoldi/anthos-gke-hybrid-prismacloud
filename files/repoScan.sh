@@ -1,9 +1,9 @@
-$TL_CONSOLE$TL_CONSOLE#!/bin/bash -l
+#!/bin/bash -l
 
-./twistcli coderepo scan --address https://$TL_CONSOLE --details -u $TL_USER -p $TL_PASS $WORK_DIR/$REPO_DIR/app 
-result=$(curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' "https://$TL_CONSOLE/api/v1/coderepos-ci?limit=1&reverse=true&sort=scanTime"|jq '.[0].pass')
+./twistcli coderepo scan --address $TL_CONSOLE --details -u $TL_USER -p $TL_PASS $REPO_DIR/app 
+result=$(curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' "$TL_CONSOLE/api/v1/coderepos-ci?limit=1&reverse=true&sort=scanTime"|jq '.[0].pass')
 
-if [ "$result" == "true" ] || [ $BYPASS_REPOSCAN == 1 ]; then
+if [ "$result" = "true" ] || [ $BYPASS_REPOSCAN = 1 ]; then
    echo "Code Repo scan passed!"
    exit 0
 else
