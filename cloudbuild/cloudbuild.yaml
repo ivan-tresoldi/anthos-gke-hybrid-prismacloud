@@ -58,9 +58,10 @@ steps:
           source build_vars &&
           curl https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o ./jq &&
           chmod +x ./jq &&
-          ./twistcli -v &&
+          ./twistcli -v > twistcli_version &&
+          cat twistcli_version
           cat build_vars &&
-          [$$LOCAL_REPO_DIR/files/repoScan.sh]
+          [./$$LOCAL_REPO_DIR/files/repoScan.sh]
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: OSS License Check 
