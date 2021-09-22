@@ -1,3 +1,5 @@
+echo $BYPASS_REPOSCAN
+
 if [ "$BYPASS_REPOSCAN" = 1 ]; then
     echo "Source Code Repository Scan bypassed by User"
     exit 0
