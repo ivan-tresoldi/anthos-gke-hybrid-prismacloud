@@ -4,7 +4,7 @@ steps:
         args:
         - -c
         - |
-          export BYPASS_REPOSCAN="1" &&
+          export BYPASS_REPOSCAN=1 &&
           export BYPASS_OSS_LICENSE=0 &&
           export BYPASS_IMAGESCAN=0 &&
           export BYPASS_WF=0 &&
@@ -33,7 +33,7 @@ steps:
         - |
           source build_vars &&
           apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/test.sh
+          /workspace/files/test.sh $$BYPASS_REPOSCAN
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
 availableSecrets:
