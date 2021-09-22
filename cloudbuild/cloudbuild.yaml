@@ -1,5 +1,5 @@
 steps:
-      - id: Set default Environment Variables
+      - id: Set default Environment Variables and prepare Environment
         name: "bash"
         args:
         - -c
@@ -11,7 +11,8 @@ steps:
           export BYPASS_SANDBOX=1 &&
           export K8S_CLUSTER="central" &&
           export CLUSTER_ZONE="us-central1-b" &&
-          env > build_vars
+          env > build_vars &&
+          chmod +x /workspace/files/*
 
       - id: twistcli download and store in workspace
         name: 'gcr.io/cloud-builders/gcloud'
