@@ -4,7 +4,7 @@ steps:
         args:
         - -c
         - |
-          export BYPASS_REPOSCAN=1 &&
+          export BYPASS_REPOSCAN="1" &&
           export BYPASS_OSS_LICENSE=0 &&
           export BYPASS_IMAGESCAN=0 &&
           export BYPASS_WF=0 &&
