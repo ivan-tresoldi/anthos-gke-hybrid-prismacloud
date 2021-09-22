@@ -45,7 +45,7 @@ steps:
         - |
           source build_vars &&
           apt-get update -y;apt-get install -y jq curl &&
-          cat $$LOCAL_REPO_DIR/files/repoScan.sh
+          $$LOCAL_REPO_DIR/files/test.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
 availableSecrets:
