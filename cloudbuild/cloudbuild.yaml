@@ -1,0 +1,61 @@
+steps:
+      - id: Set default Environment Variables
+        name: "bash"
+        args:
+        - -c
+        - |
+          export BYPASS_REPOSCAN=0 &&
+          export BYPASS_OSS_LICENSE=0 &&
+          export BYPASS_IMAGESCAN=0 &&
+          export BYPASS_WF=0 &&
+          export BYPASS_SANDBOX=1 &&
+          export TWISTCLI_PATH="/workspace"
+          export WORK_DIR="/workspace"
+          export REPO_URL="https://github.com/ivan-tresoldi/anthos-gke-hybrid-prismacloud" &&
+          export LOCAL_REPO_DIR=${REPO_URL##*/} &&
+          export K8S_CLUSTER="central" &&
+          export CLUSTER_ZONE="us-central1-b" &&
+          env > build_vars
+
+      - id: Clone Code Repo to local Workspace
+        name: 'gcr.io/cloud-builders/gcloud'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          source build_vars &&
+          git clone "$$REPO_URL" &&
+          chmod +x $$LOCAL_REPO_DIR/files/*
+
+      - id: twistcli download and store in workspace
+        name: 'gcr.io/cloud-builders/gcloud'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          source build_vars &&
+          curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o twistcli;chmod +x twistcli
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+
+      - id: Repo Vulnerability scan
+        name: "ubuntu"
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          source build_vars &&
+          apt-get update -y;apt-get install -y jq curl &&
+          cat $$LOCAL_REPO_DIR/files/repoScan.sh > /workspace/test.txt &&
+          echo /workspace/test.txt
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/pcc-dev-sandbox/secrets/TL_USER/versions/latest
+    env: TL_USER
+  - versionName: projects/pcc-dev-sandbox/secrets/TL_PASS/versions/latest
+    env: TL_PASS
+  - versionName: projects/pcc-dev-sandbox/secrets/TL_CONSOLE/versions/latest
+    env: TL_CONSOLE
+  - versionName: projects/pcc-dev-sandbox/secrets/BRIDGECREW_API_KEY/versions/latest
+    env: BRIDGECREW_API_KEY
