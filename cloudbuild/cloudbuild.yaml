@@ -9,10 +9,6 @@ steps:
           export BYPASS_IMAGESCAN=0 &&
           export BYPASS_WF=0 &&
           export BYPASS_SANDBOX=1 &&
-          export TWISTCLI_PATH="/workspace"
-          export WORK_DIR="/workspace"
-          export REPO_URL="https://github.com/ivan-tresoldi/anthos-gke-hybrid-prismacloud" &&
-          export LOCAL_REPO_DIR=${REPO_URL##*/} &&
           export K8S_CLUSTER="central" &&
           export CLUSTER_ZONE="us-central1-b" &&
           env > build_vars
@@ -36,7 +32,7 @@ steps:
         - |
           source build_vars &&
           apt-get update -y;apt-get install -y jq curl &&
-          $$LOCAL_REPO_DIR/files/test.sh
+          /workspace/files/test.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
 availableSecrets:
