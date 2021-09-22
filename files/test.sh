@@ -1,4 +1,3 @@
-echo $1
 if [ "$1" = 1 ]; then
     echo "Source Code Repository Scan bypassed by User"
     exit 0
