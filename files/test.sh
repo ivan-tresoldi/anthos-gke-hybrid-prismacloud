@@ -1,1 +1,1 @@
-echo $BYPASS_REPOSCAN
+echo "$BYPASS_REPOSCAN"
