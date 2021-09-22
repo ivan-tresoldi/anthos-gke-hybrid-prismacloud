@@ -1,7 +1,3 @@
-#!/bin/bash -l
-
-#export KUBECONFIG=$WORK_DIR/kubeconfig
-
 PO=$(kubectl get po -n evil|grep evil| awk '{ print $1 }')
 
 echo "DL bad evil file"

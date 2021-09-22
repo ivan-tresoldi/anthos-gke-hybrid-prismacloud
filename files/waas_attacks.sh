@@ -1,7 +1,3 @@
-#!/bin/bash -l
-
-#export KUBECONFIG=$WORK_DIR/kubeconfig
-
 CHECKSVC=$(kubectl get svc -n evil|grep evil)
 if [[ $CHECKSVC == *"No resources found"* ]]; then
    echo "No resources found"

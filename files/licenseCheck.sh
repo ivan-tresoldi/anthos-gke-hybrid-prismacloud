@@ -1,13 +1,14 @@
-#!/bin/bash -l
-
-./twistcli coderepo scan --address $TL_CONSOLE -u $TL_USER -p $TL_PASS $REPO_DIR/license  
-result=$(curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' "$TL_CONSOLE/api/v1/coderepos-ci?limit=1&reverse=true&sort=scanTime"|jq '.[0].pass')
-
-
-if [ "$result" = "true" ] || [ "$BYPASS_OSS_LICENSE" = 1 ]; then
-   echo "License check passed!"
-   exit 0
+if [ "$1" = 1 ]; then
+    echo "OSS License check bypassed by User"
+    exit 0
 else
-   echo "License check failed!"
-   exit 1
+   ./twistcli coderepo scan --address $TL_CONSOLE -u $TL_USER -p $TL_PASS "/workspace/license" 
+   result=$(curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' "$TL_CONSOLE/api/v1/coderepos-ci?limit=1&reverse=true&sort=scanTime"|jq '.[0].pass')
+   if [ "$result" = "true" ] then
+      echo "License check passed!"
+      exit 0
+   else
+      echo "License check failed!"
+      exit 1
+   fi
 fi
