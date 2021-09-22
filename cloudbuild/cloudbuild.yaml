@@ -140,3 +140,5 @@ availableSecrets:
     env: TL_PASS
   - versionName: projects/pcc-dev-sandbox/secrets/TL_CONSOLE/versions/latest
     env: TL_CONSOLE
+  - versionName: projects/pcc-dev-sandbox/secrets/BRIDGECREW_API_KEY/versions/latest
+    env: BRIDGECREW_API_KEY
