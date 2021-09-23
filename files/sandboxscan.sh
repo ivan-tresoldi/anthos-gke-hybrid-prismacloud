@@ -12,5 +12,5 @@ else
    else
       echo "Image Vulnerability scan failed!"
       exit 1
+   fi
 fi
-
