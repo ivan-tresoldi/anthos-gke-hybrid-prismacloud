@@ -103,8 +103,8 @@ steps:
         args:
         - run
         - --filename=/workspace/k8s/deploy.yml
-        - --location="$$CLOUDSDK_COMPUTE_ZONE"
-        - --cluster="$$CLOUDSDK_CONTAINER_CLUSTER"
+        - --location="$CLOUDSDK_COMPUTE_ZONE"
+        - --cluster="$CLOUDSDK_CONTAINER_CLUSTER"
       
       
       - id: Execute Runtime attacks 
@@ -113,7 +113,7 @@ steps:
         args:
         - -c
         - |
-          gcloud container clusters get-credentials $$CLOUDSDK_CONTAINER_CLUSTER --zone $$CLOUDSDK_COMPUTE_ZONE --project $$PROJECT_ID &&
+          gcloud container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER --zone $CLOUDSDK_COMPUTE_ZONE --project $$PROJECT_ID &&
           $$LOCAL_REPO_DIR/files/runtime_attacks.sh
         
          
@@ -123,5 +123,5 @@ steps:
         args:
         - -c
         - |
-          gcloud container clusters get-credentials $$CLOUDSDK_CONTAINER_CLUSTER --zone $$CLOUDSDK_COMPUTE_ZONE --project $$PROJECT_ID &&
+          gcloud container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER --zone $CLOUDSDK_COMPUTE_ZONE --project $$PROJECT_ID &&
           /workspace/files/waas_attacks.sh
