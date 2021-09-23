@@ -1,136 +1,11 @@
-steps:
-      - id: Set default Environment Variables and prepare Environment
-        name: "bash"
-        args:
-        - -c
-        - |
-          export BYPASS_REPOSCAN=0 &&
-          export BYPASS_OSS_LICENSE=0 &&
-          export BYPASS_IMAGESCAN=0 &&
-          export BYPASS_WF=0 &&
-          export BYPASS_SANDBOX=1 &&
-          export K8S_CLUSTER="central" &&
-          export CLUSTER_ZONE="us-central1-b" &&
-          env > build_vars &&
-          chmod +x /workspace/files/*
-
-      - id: Download twistcli
-        name: 'gcr.io/cloud-builders/gcloud'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o twistcli;chmod +x twistcli
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-
-      - id: Run Bridgecrew/Checkov IaC scanning
-        name: 'bridgecrew/checkov:latest'
-        entrypoint: /bin/bash
-        args:
-        - -c
-        - |
-          source build_vars &&
-          checkov --bc-api-key $$BRIDGECREW_API_KEY --directory /workspace --soft-fail
-        secretEnv: ['BRIDGECREW_API_KEY']
-
-      - id: Repo Vulnerability scan
-        name: "ubuntu"
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/test.sh $$BYPASS_REPOSCAN
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-
-      - id: OSS License Check 
-        name: 'ubuntu'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/licenseCheck.sh $$BYPASS_OSS_LICENSE
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-
-      - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
-        name: 'gcr.io/cloud-builders/gcloud'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          /workspace/files/addPolicies.sh
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-
-      - id: Scan Image for vulnerabilities
-        name: 'ubuntu'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/scanImage.sh $$BYPASS_IMAGESCAN
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-     
-      - id: Scan Image for Malware using Wildfire
-        name: 'ubuntu'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/malwareCheck.sh $$BYPASS_WF
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-
-      - id: Sandbox Runtime Scanning of Image       
-        name: 'ubuntu'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          apt-get update -y;apt-get install -y jq curl docker &&
-          /workspace/files/sandboxscan.sh $$BYPASS_SANDBOX
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-       
-      - id: Deploy Application   
-        name: 'gcr.io/cloud-builders/gcloud'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          gcloud container clusters get-credentials $$K8S_CLUSTER --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
-          /workspace/files/deploy.sh
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-       
-      - id: Execute Runtime attacks 
-        name: 'gcr.io/cloud-builders/gcloud'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          gcloud container clusters get-credentials $$K8S_CLUSTER --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
-          /workspace/files/runtime_attacks.sh
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-         
-      - id: Execute WAAS attacks 
-        name: 'gcr.io/cloud-builders/gcloud'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          source build_vars &&
-          gcloud container clusters get-credentials $$K8S_CLUSTER --zone $$CLUSTER_ZONE --project $$PROJECT_ID &&
-          /workspace/files/waas_attacks.sh
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+options:
+  env: [BYPASS_REPOSCAN=0,
+        BYPASS_OSS_LICENSE=0,
+        BYPASS_IMAGESCAN=0,
+        export BYPASS_WF=0,
+        BYPASS_SANDBOX=1,
+        CLOUDSDK_CONTAINER_CLUSTER="central",
+        CLOUDSDK_COMPUTE_ZONE="us-central1-b"]
 
 availableSecrets:
   secretManager:
@@ -142,3 +17,111 @@ availableSecrets:
     env: TL_CONSOLE
   - versionName: projects/pcc-dev-sandbox/secrets/BRIDGECREW_API_KEY/versions/latest
     env: BRIDGECREW_API_KEY
+
+
+steps:
+      - id: Download twistcli
+        name: 'gcr.io/cloud-builders/gcloud'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o twistcli;chmod +x twistcli
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+
+      - id: Run Bridgecrew/Checkov IaC scanning
+        name: 'bridgecrew/checkov:latest'
+        entrypoint: /bin/bash
+        args:
+        - -c
+        - |
+          checkov --bc-api-key $$BRIDGECREW_API_KEY --directory /workspace --soft-fail
+        secretEnv: ['BRIDGECREW_API_KEY']
+
+      - id: Repo Vulnerability scan
+        name: "ubuntu"
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          apt-get update -y;apt-get install -y jq curl &&
+          chmod +x /workspace/files/* &&
+          /workspace/files/repoScan.sh $$BYPASS_REPOSCAN
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+
+      - id: OSS License Check 
+        name: 'ubuntu'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          apt-get update -y;apt-get install -y jq curl &&
+          /workspace/files/licenseCheck.sh $$BYPASS_OSS_LICENSE
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+
+      - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
+        name: 'gcr.io/cloud-builders/gcloud'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          /workspace/files/addPolicies.sh
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+
+      - id: Scan Image for vulnerabilities
+        name: 'ubuntu'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          apt-get update -y;apt-get install -y jq curl &&
+          /workspace/files/scanImage.sh $$BYPASS_IMAGESCAN
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+     
+      - id: Scan Image for Malware using Wildfire
+        name: 'ubuntu'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          apt-get update -y;apt-get install -y jq curl &&
+          /workspace/files/malwareCheck.sh $$BYPASS_WF
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+
+      - id: Sandbox Runtime Scanning of Image       
+        name: 'ubuntu'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          apt-get update -y;apt-get install -y jq curl docker &&
+          /workspace/files/sandboxscan.sh $$BYPASS_SANDBOX
+        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
+       
+      - id: Deploy Application 
+        name: "gcr.io/cloud-builders/gke-deploy"
+        args:
+        - run
+        - --filename=/workspace/k8s/deploy.yml
+        - --location="$$CLOUDSDK_COMPUTE_ZONE"
+        - --cluster="$$CLOUDSDK_CONTAINER_CLUSTER"
+      
+      
+      - id: Execute Runtime attacks 
+        name: 'gcr.io/cloud-builders/cloud-sdk'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          gcloud container clusters get-credentials $$CLOUDSDK_CONTAINER_CLUSTER --zone $$CLOUDSDK_COMPUTE_ZONE --project $$PROJECT_ID &&
+          $$LOCAL_REPO_DIR/files/runtime_attacks.sh
+        
+         
+      - id: Execute WAAS attacks 
+        name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+        entrypoint: "bash"
+        args:
+        - -c
+        - |
+          gcloud container clusters get-credentials $$CLOUDSDK_CONTAINER_CLUSTER --zone $$CLOUDSDK_COMPUTE_ZONE --project $$PROJECT_ID &&
+          /workspace/files/waas_attacks.sh
