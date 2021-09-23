@@ -103,8 +103,8 @@ steps:
         args:
         - run
         - --filename=/workspace/k8s/deploy.yml
-        - --location="$CLOUDSDK_COMPUTE_ZONE"
-        - --cluster="$CLOUDSDK_CONTAINER_CLUSTER"
+        - --location="us-central1-b"
+        - --cluster="central"
       
       
       - id: Execute Runtime attacks 
