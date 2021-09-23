@@ -89,7 +89,7 @@ steps:
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Sandbox Runtime Scanning of Image       
-        name: 'ubuntu'
+        name: 'docker'
         entrypoint: "bash"
         args:
         - -c
