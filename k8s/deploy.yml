@@ -1,10 +1,19 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: evil
+  labels:
+    name: evil
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
+  name: evilpetclinic
+  namespace: evil
   labels:
     app: evilpetclinic
-  name: evilpetclinic
 spec:
   replicas: 1
   selector:
@@ -13,7 +22,6 @@ spec:
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: evilpetclinic
     spec:
@@ -33,5 +41,3 @@ spec:
       securityContext:
         runAsUser: 0
       hostNetwork: false
-
-status: {}

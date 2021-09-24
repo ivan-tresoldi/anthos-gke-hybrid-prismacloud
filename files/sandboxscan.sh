@@ -1,4 +1,4 @@
-if [ "$1" = 1 ]; then
+if [ "$BYPASS_SANDBOX" = 1 ]; then
     echo "Image Sandbox Scan bypassed by User"
     exit 0
 else
