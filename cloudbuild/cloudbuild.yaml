@@ -116,8 +116,10 @@ steps:
         args:
         - -c
         - |
-          gcloud container clusters get-credentials $$CLOUDSDK_CONTAINER_CLUSTER --zone $$CLOUDSDK_COMPUTE_ZONE &&
           /workspace/files/runtime_attacks.sh
+        env:
+        - 'CLOUDSDK_COMPUTE_ZONE=us-central1-b'
+        - 'CLOUDSDK_CONTAINER_CLUSTER=central'
         
          
       - id: Execute WAAS attacks 
@@ -126,5 +128,7 @@ steps:
         args:
         - -c
         - |
-          gcloud container clusters get-credentials $$CLOUDSDK_CONTAINER_CLUSTER --zone $$CLOUDSDK_COMPUTE_ZONE &&
           /workspace/files/waas_attacks.sh
+        env:
+        - 'CLOUDSDK_COMPUTE_ZONE=us-central1-b'
+        - 'CLOUDSDK_CONTAINER_CLUSTER=central'
