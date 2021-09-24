@@ -1,5 +1,8 @@
 version=$(curl -s -q -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X GET $TL_CONSOLE/api/v1/version | sed -e 's/"//' |cut -d. -f1)
 
+echo "Version is:"
+echo $version
+
 if [ "$version" -lt 21 ]
 then
  #version<21"
