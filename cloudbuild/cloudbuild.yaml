@@ -27,7 +27,6 @@ steps:
         args:
         - -c
         - |
-          printenv &&
           curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o twistcli;chmod +x twistcli
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
@@ -46,7 +45,6 @@ steps:
         args:
         - -c
         - |
-          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
           chmod +x /workspace/files/* &&
           /workspace/files/repoScan.sh
@@ -58,7 +56,6 @@ steps:
         args:
         - -c
         - |
-          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
           /workspace/files/licenseCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
@@ -66,21 +63,17 @@ steps:
       - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
         name: 'ubuntu'
         entrypoint: "bash"
-        args:
-        - -c
-        - |
-          printenv &&
-          /workspace/files/addPolicies.sh
+        args: ['/workspace/files/addPolicies.sh']
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
-      - id: Scan Image for vulnerabilities
+      - id: Scan Image for Vulnerabilities
         name: 'gcr.io/cloud-builders/docker'
         entrypoint: "bash"
         args:
         - -c
         - |
           apt-get update -y;apt-get install -y jq curl &&
-          docker pull itresoldi/evilpetclinic:latest
+          docker pull itresoldi/evilpetclinic:latest &&
           /workspace/files/scanImage.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
      
@@ -90,19 +83,17 @@ steps:
         args:
         - -c
         - |
-          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/malwareCheck.sh $$BYPASS_WF
+          /workspace/files/malwareCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Sandbox Runtime Scanning of Image       
-        name: 'ubuntu'
+        name: 'gcr.io/cloud-builders/docker'
         entrypoint: "bash"
         args:
         - -c
         - |
-          printenv &&
-          apt-get update -y;apt-get install -y jq curl docker &&
+          apt-get update -y;apt-get install -y jq curl &&
           /workspace/files/sandboxscan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
        
@@ -121,10 +112,7 @@ steps:
       - id: Execute Runtime attacks 
         name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
         entrypoint: "bash"
-        args:
-        - -c
-        - |
-          /workspace/files/runtime_attacks.sh
+        args: ['/workspace/files/runtime_attacks.sh']
         env:
         - 'CLOUDSDK_COMPUTE_ZONE=us-central1-b'
         - 'CLOUDSDK_CONTAINER_CLUSTER=central'
@@ -133,10 +121,7 @@ steps:
       - id: Execute WAAS attacks 
         name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
         entrypoint: "bash"
-        args:
-        - -c
-        - |
-          /workspace/files/waas_attacks.sh
+        args: ['/workspace/files/waas_attacks.sh']
         env:
         - 'CLOUDSDK_COMPUTE_ZONE=us-central1-b'
         - 'CLOUDSDK_CONTAINER_CLUSTER=central'
