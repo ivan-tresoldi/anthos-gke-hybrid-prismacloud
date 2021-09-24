@@ -49,7 +49,7 @@ steps:
           printenv &&
           apt-get update -y;apt-get install -y jq curl &&
           chmod +x /workspace/files/* &&
-          /workspace/files/repoScan.sh $$BYPASS_REPOSCAN
+          /workspace/files/repoScan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: OSS License Check 
@@ -79,9 +79,9 @@ steps:
         args:
         - -c
         - |
-          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/scanImage.sh $$BYPASS_IMAGESCAN
+          docker pull itresoldi/evilpetclinic:latest
+          /workspace/files/scanImage.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
      
       - id: Scan Image for Malware using Wildfire
