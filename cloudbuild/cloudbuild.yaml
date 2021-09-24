@@ -60,7 +60,7 @@ steps:
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
-        name: 'gcr.io/cloud-builders/gcloud'
+        name: 'ubuntu'
         entrypoint: "bash"
         args:
         - -c
@@ -111,13 +111,13 @@ steps:
       
       
       - id: Execute Runtime attacks 
-        name: 'gcr.io/cloud-builders/cloud-sdk'
+        name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
         entrypoint: "bash"
         args:
         - -c
         - |
           gcloud container clusters get-credentials $$CLOUDSDK_CONTAINER_CLUSTER --zone $$CLOUDSDK_COMPUTE_ZONE --project $$PROJECT_ID &&
-          $$LOCAL_REPO_DIR/files/runtime_attacks.sh
+          /workspace/files/runtime_attacks.sh
         
          
       - id: Execute WAAS attacks 
