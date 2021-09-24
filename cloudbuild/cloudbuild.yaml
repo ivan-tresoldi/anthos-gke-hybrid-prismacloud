@@ -61,7 +61,7 @@ steps:
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
-        name: 'ubuntu'
+        name: 'gcr.io/cloud-builders/curl'
         entrypoint: "bash"
         args: ['/workspace/files/addPolicies.sh']
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
