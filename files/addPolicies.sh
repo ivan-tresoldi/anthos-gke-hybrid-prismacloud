@@ -14,29 +14,16 @@ else
  waas_payload='{"_id":"containerAppFirewall","rules":[{"modified":"2021-05-21T15:54:50.405Z","owner":"itresoldi_paloaltonetworks_com","name":"Evil_WAAS_Rule","previousName":"","collections":[{"hosts":["*"],"images":["*evilpetclinic*"],"labels":["*"],"containers":["*"],"functions":["*"],"namespaces":["*"],"appIDs":["*"],"accountIDs":["*"],"codeRepos":["*"],"clusters":["*"],"name":"evilpetclinic","owner":"itresoldi_paloaltonetworks_com","modified":"2021-05-10T08:07:36.402Z","color":"#68DCFC","system":false,"prisma":false}],"applicationsSpec":[{"appID":"1337","customBlockResponse":{},"banDurationMinutes":2,"certificate":{},"dosConfig":{"enabled":true,"alert":{"burst":3,"average":2},"ban":{"burst":5,"average":4},"matchConditions":[],"trackSession":false},"apiSpec":{"endpoints":[{"host":"*","basePath":"*","exposedPort":0,"internalPort":8080,"tls":false,"http2":false}],"effect":"disable","fallbackEffect":"disable","skipLearning":false,"paths":[]},"botProtectionSpec":{"userDefinedBots":[],"knownBotProtectionsSpec":{"searchEngineCrawlers":"disable","businessAnalytics":"disable","educational":"disable","news":"disable","financial":"disable","contentFeedClients":"disable","archiving":"disable","careerSearch":"disable","mediaSearch":"disable"},"unknownBotProtectionSpec":{"generic":"disable","webAutomationTools":"disable","webScrapers":"disable","apiLibraries":"disable","httpLibraries":"disable","botImpersonation":"disable","browserImpersonation":"disable","requestAnomalies":{"threshold":9,"effect":"disable"}},"sessionValidation":"disable","interstitialPage":false,"jsInjectionSpec":{"enabled":false,"timeoutEffect":"disable"},"reCAPTCHASpec":{"enabled":false,"secretKey":{},"type":"checkbox","allSessions":true,"successExpirationHours":24}},"networkControls":{"advancedProtectionEffect":"prevent","subnets":{"enabled":false,"allowMode":true,"fallbackEffect":"alert","blockingMode":"allowed","alert":null,"prevent":null},"countries":{"enabled":false,"allowMode":true,"fallbackEffect":"alert","blockingMode":"allowed","alert":null,"prevent":null}},"body":{"inspectionSizeBytes":131072},"intelGathering":{"infoLeakageEffect":"prevent","removeFingerprintsEnabled":true},"maliciousUpload":{"effect":"disable","allowedFileTypes":[],"allowedExtensions":[]},"csrfEnabled":true,"clickjackingEnabled":true,"sqli":{"effect":"prevent","exceptionFields":[]},"xss":{"effect":"prevent","exceptionFields":[]},"attackTools":{"effect":"prevent","exceptionFields":[]},"shellshock":{"effect":"prevent","exceptionFields":[]},"malformedReq":{"effect":"prevent","exceptionFields":[]},"cmdi":{"effect":"prevent","exceptionFields":[]},"lfi":{"effect":"prevent","exceptionFields":[]},"codeInjection":{"effect":"prevent","exceptionFields":[]},"remoteHostForwarding":{},"customRules":[],"sessionCookieEnabled":false,"sessionCookieBan":false,"headerSpecs":[]}],"expandDetails":true}'
 fi
 
-curl -k -s \
-  -u $TL_USER:$TL_PASS \
-  -H 'Content-Type: application/json' \
-  -X POST \
-  -d '{"name":"evilpetclinic","containers":["*"],"hosts":["*"],"images":["*evilpetclinic*"],"labels":["*"],"appIDs":["*"],"functions":["*"],"namespaces":["*"],"accountIDs":["*"],"codeRepos":["*"],"clusters":["*"],"color":"#68DCFC"}' \
-  $TL_CONSOLE/api/v1/collections
+curl -k -s -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X POST -d '{"name":"evilpetclinic","containers":["*"],"hosts":["*"],"images":["*evilpetclinic*"],"labels":["*"],"appIDs":["*"],"functions":["*"],"namespaces":["*"],"accountIDs":["*"],"codeRepos":["*"],"clusters":["*"],"color":"#68DCFC"}' $TL_CONSOLE/api/v1/collections
 
 #add customer malware signature
-curl -s -k \
-  -u $TL_USER:$TL_PASS \
-  -H 'Content-Type: application/json' \
-  -X PUT \
-  -d '{"feed":[{"name":"evil","md5":"b927cd908b58e703ab86f484b44a3791","allowed":false}]}' \
-  $TL_CONSOLE/api/v1/feeds/custom/malware
+curl -s -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d '{"feed":[{"name":"evil","md5":"b927cd908b58e703ab86f484b44a3791","allowed":false}]}' $TL_CONSOLE/api/v1/feeds/custom/malware
   
-curl -s -k \
-  -u $TL_USER:$TL_PASS \
-  -H 'Content-Type: application/json' \
-  -X PUT \
-  -d "$runtime_payload" \
-  $TL_CONSOLE/api/v1/policies/runtime/container
+curl -s -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d "$runtime_payload" $TL_CONSOLE/api/v1/policies/runtime/container
 
 status=$?
+echo "Status Regole Runtime"
+echo $status
 
 if [ $status -eq 0 ]
 then
@@ -46,14 +33,11 @@ else
 fi
 
 
-curl -s -k \
-  -u $TL_USER:$TL_PASS \
-  -H 'Content-Type: application/json' \
-  -X PUT \
-  -d '{"rules":[{"modified":"2021-01-20T10:10:13.396Z","owner":"itresoldi_paloaltonetworks_com","name":"Demo_Vuln_Rule","previousName":"Demo_Vuln_Rule","effect":"alert","collections":[{"hosts":["*"],"images":["*evilpetclinic*"],"labels":["*"],"containers":["*"],"functions":["*"],"namespaces":["*"],"appIDs":["*"],"accountIDs":["*"],"codeRepos":["*"],"clusters":["*"],"name":"evilpetclinic","owner":"itresoldi_paloaltonetworks_com","modified":"2021-01-20T09:55:41.982Z","color":"#68DCFC","system":false}],"action":["*"],"condition":{"readonly":false,"device":"","vulnerabilities":[]},"group":["*"],"alertThreshold":{"disabled":false,"value":1},"blockThreshold":{"enabled":false,"value":0},"graceDays":0,"verbose":false,"allCompliance":false,"onlyFixed":false,"cveRules":[],"tags":[]}' \
-  $TL_CONSOLE/api/v1/policies/vulnerability/images
+curl -s -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d '{"rules":[{"modified":"2021-01-20T10:10:13.396Z","owner":"itresoldi_paloaltonetworks_com","name":"Demo_Vuln_Rule","previousName":"Demo_Vuln_Rule","effect":"alert","collections":[{"hosts":["*"],"images":["*evilpetclinic*"],"labels":["*"],"containers":["*"],"functions":["*"],"namespaces":["*"],"appIDs":["*"],"accountIDs":["*"],"codeRepos":["*"],"clusters":["*"],"name":"evilpetclinic","owner":"itresoldi_paloaltonetworks_com","modified":"2021-01-20T09:55:41.982Z","color":"#68DCFC","system":false}],"action":["*"],"condition":{"readonly":false,"device":"","vulnerabilities":[]},"group":["*"],"alertThreshold":{"disabled":false,"value":1},"blockThreshold":{"enabled":false,"value":0},"graceDays":0,"verbose":false,"allCompliance":false,"onlyFixed":false,"cveRules":[],"tags":[]}' $TL_CONSOLE/api/v1/policies/vulnerability/images
 
 status=$?
+echo "Status Regole Vulnerability"
+echo $status
 
 if [ $status -eq 0 ]
 then
@@ -63,14 +47,11 @@ else
 fi
 
 
-curl -s -k \
-  -u $TL_USER:$TL_PASS \
-  -H 'Content-Type: application/json' \
-  -X PUT \
-  -d "$waas_payload" \
-   $TL_CONSOLE/api/v1/policies/firewall/app/container
+curl -s -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d "$waas_payload" $TL_CONSOLE/api/v1/policies/firewall/app/container
 
 status=$?
+echo "Status Regole WAAS"
+echo $status
 
 if [ $status -eq 0 ]
 then
