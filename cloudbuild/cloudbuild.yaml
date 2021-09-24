@@ -60,7 +60,7 @@ steps:
         - |
           printenv &&
           apt-get update -y;apt-get install -y jq curl &&
-          /workspace/files/licenseCheck.sh $$BYPASS_OSS_LICENSE
+          /workspace/files/licenseCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
@@ -74,7 +74,7 @@ steps:
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Scan Image for vulnerabilities
-        name: 'ubuntu'
+        name: 'gcr.io/cloud-builders/docker'
         entrypoint: "bash"
         args:
         - -c
@@ -103,7 +103,7 @@ steps:
         - |
           printenv &&
           apt-get update -y;apt-get install -y jq curl docker &&
-          /workspace/files/sandboxscan.sh $$BYPASS_SANDBOX
+          /workspace/files/sandboxscan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
        
       - id: Deploy Application 
