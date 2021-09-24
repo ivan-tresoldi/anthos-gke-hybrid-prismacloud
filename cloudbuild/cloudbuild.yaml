@@ -1,5 +1,5 @@
 options:
-  environments:
+  env:
   - BYPASS_REPOSCAN=0
   - BYPASS_OSS_LICENSE=0
   - BYPASS_IMAGESCAN=0
