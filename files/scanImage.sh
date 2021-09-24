@@ -1,4 +1,4 @@
-if [ "$1" = 1 ]; then
+if [ "$BYPASS_IMAGESCAN" = 1 ]; then
     echo "Image Scan bypassed by User"
     exit 0
 else
