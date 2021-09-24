@@ -1,11 +1,12 @@
 options:
-  env: [BYPASS_REPOSCAN=0,
-        BYPASS_OSS_LICENSE=0,
-        BYPASS_IMAGESCAN=0,
-        export BYPASS_WF=0,
-        BYPASS_SANDBOX=1,
-        CLOUDSDK_CONTAINER_CLUSTER="central",
-        CLOUDSDK_COMPUTE_ZONE="us-central1-b"]
+  environments:
+  - BYPASS_REPOSCAN=0
+  - BYPASS_OSS_LICENSE=0
+  - BYPASS_IMAGESCAN=0
+  - BYPASS_WF=0
+  - BYPASS_SANDBOX=1
+  - CLOUDSDK_CONTAINER_CLUSTER="central"
+  - CLOUDSDK_COMPUTE_ZONE="us-central1-b"
 
 availableSecrets:
   secretManager:
@@ -26,6 +27,7 @@ steps:
         args:
         - -c
         - |
+          printenv &&
           curl -s -k -u $$TL_USER:$$TL_PASS "$$TL_CONSOLE/api/v1/util/twistcli" -v -o twistcli;chmod +x twistcli
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
@@ -44,6 +46,7 @@ steps:
         args:
         - -c
         - |
+          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
           chmod +x /workspace/files/* &&
           /workspace/files/repoScan.sh $$BYPASS_REPOSCAN
@@ -55,6 +58,7 @@ steps:
         args:
         - -c
         - |
+          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
           /workspace/files/licenseCheck.sh $$BYPASS_OSS_LICENSE
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
@@ -65,6 +69,7 @@ steps:
         args:
         - -c
         - |
+          printenv &&
           /workspace/files/addPolicies.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
@@ -74,6 +79,7 @@ steps:
         args:
         - -c
         - |
+          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
           /workspace/files/scanImage.sh $$BYPASS_IMAGESCAN
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
@@ -84,6 +90,7 @@ steps:
         args:
         - -c
         - |
+          printenv &&
           apt-get update -y;apt-get install -y jq curl &&
           /workspace/files/malwareCheck.sh $$BYPASS_WF
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
@@ -94,6 +101,7 @@ steps:
         args:
         - -c
         - |
+          printenv &&
           apt-get update -y;apt-get install -y jq curl docker &&
           /workspace/files/sandboxscan.sh $$BYPASS_SANDBOX
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
