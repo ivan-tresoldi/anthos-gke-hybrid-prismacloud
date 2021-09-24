@@ -8,6 +8,8 @@ fi
 kubectl expose deploy evilpetclinic -n evil --port=80 --target-port=8080
 SVC=$(kubectl get svc -n evil|grep evil| awk '{ print $3 }')
 
+echo $SVC
+
 echo "testing SQLi attack"
 curl $SVC?id=%25%27+and+1%3D0+union+select+null%2C+table_name+from+information_schema.tables+%23&Submit=Submit
 if test "$status" = "0"; then
