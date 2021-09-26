@@ -1,6 +1,6 @@
 PO=$(kubectl get po -n evil|grep evil| awk '{ print $1 }')
 
-echo "Pod":
+echo "Pod name is":
 echo $PO
 
 echo "DL bad evil file"

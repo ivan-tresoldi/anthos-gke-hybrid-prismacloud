@@ -1,11 +1,3 @@
-CHECKSVC=$(kubectl get svc -n evil|grep evil)
-if [[ $CHECKSVC == *"No resources found"* ]]; then
-   echo "No resources found"
-else
-   kubectl delete svc evilpetclinic -n evil
-fi
-
-kubectl expose deploy evilpetclinic -n evil --port=80 --target-port=8080
 SVC=$(kubectl get svc -n evil|grep evil| awk '{ print $3 }')
 
 echo $SVC

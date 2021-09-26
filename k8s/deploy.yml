@@ -41,3 +41,17 @@ spec:
       securityContext:
         runAsUser: 0
       hostNetwork: false
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: evilpetclinic-service
+  namespace: evil
+spec:
+  type: ClusterIP
+  ports:
+  - targetPort: 8080
+  - port: 80
+  selector: 
+    app: evilpetclinic
