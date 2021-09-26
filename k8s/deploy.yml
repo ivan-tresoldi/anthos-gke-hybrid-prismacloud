@@ -49,9 +49,10 @@ metadata:
   name: evilpetclinic-service
   namespace: evil
 spec:
-  type: ClusterIP
+  selector:
+    app: evil
   ports:
-  - targetPort: 8080
-  - port: 80
-  selector: 
-    app: evilpetclinic
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
