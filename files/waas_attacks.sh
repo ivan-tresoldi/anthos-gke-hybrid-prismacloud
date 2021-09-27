@@ -1,7 +1,7 @@
 #Wait for LB to come up
-Sleep 10
+sleep 10
 
-SVC=$(kubectl get svc -n evil|grep evil| awk '{ print $3 }')
+SVC=$(kubectl get svc -n evil|grep evil| awk '{ print $4 }')
 
 echo "Service IP:"
 echo $SVC
