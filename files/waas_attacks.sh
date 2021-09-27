@@ -1,5 +1,9 @@
+#Wait for LB to come up
+Sleep 10
+
 SVC=$(kubectl get svc -n evil|grep evil| awk '{ print $3 }')
 
+echo "Service IP:"
 echo $SVC
 
 echo "testing SQLi attack"
@@ -30,5 +34,5 @@ curl $SVC --referer "() { :; }; ping -c 3 209.126.230.74"
 echo "testing Malformed HTTP Request attack"
 curl -X GET $SVC -d "echo 'hello'"
 
-echo "Testing DoS protection. (Remember to tweak the DoS settings...)"
-for i in {1..51}; do curl $SVC; done
+# echo "Testing DoS protection. (Remember to tweak the DoS settings...)"
+# for i in {1..51}; do curl $SVC; done
