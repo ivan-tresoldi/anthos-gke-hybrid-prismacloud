@@ -50,7 +50,7 @@ metadata:
   namespace: evil
 spec:
   selector:
-    app: evil
+    app: evilpetclinic
   ports:
     - protocol: TCP
       port: 80
