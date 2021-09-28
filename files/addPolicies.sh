@@ -5,7 +5,7 @@ waas_payload='{"_id":"containerAppFirewall","rules":[{"modified":"2021-09-27T10:
 #add runtime rules  
 curl -s -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d "$runtime_payload" $TL_CONSOLE/api/v1/policies/runtime/container
 
-if [ $status -eq 0 ]
+if [ "$status" = 0 ]
 then
   echo "Successfully installed Runtime policies"
 else
@@ -15,7 +15,7 @@ fi
 #add waas rules
 curl -s -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d "$waas_payload" $TL_CONSOLE/api/v1/policies/firewall/app/container
 
-if [ $status -eq 0 ]
+if [ "$status" = 0 ]
 then
   echo "Successfully installed container WAAS policies"
 else
