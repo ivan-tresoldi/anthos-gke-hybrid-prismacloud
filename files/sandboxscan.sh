@@ -2,7 +2,7 @@ if [ "$BYPASS_SANDBOX" = 1 ]; then
     echo "Image Sandbox Scan bypassed by User"
     exit 0
 else
-   sudo twistcli sandbox -u $TL_USER -p $TL_PASS --address $TL_CONSOLE --output-file "sandbox.json" --analysis-duration 1m itresoldi/evilpetclinic:latest
+   twistcli sandbox -u $TL_USER -p $TL_PASS --address $TL_CONSOLE --output-file "sandbox.json" --analysis-duration 1m itresoldi/evilpetclinic:latest
    
    status=$?
    echo "Exit status is:"
