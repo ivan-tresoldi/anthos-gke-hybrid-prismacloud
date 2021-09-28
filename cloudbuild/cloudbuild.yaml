@@ -2,7 +2,7 @@ options:
   env:
   - BYPASS_REPOSCAN=0
   - BYPASS_OSS_LICENSE=0
-  - BYPASS_IMAGESCAN=0
+  - BYPASS_IMAGESCAN=1
   - BYPASS_WF=0
   - BYPASS_SANDBOX=0
   - CLOUDSDK_CONTAINER_CLUSTER="central"
@@ -83,18 +83,13 @@ steps:
         args:
         - -c
         - |
-          apt-get update -y
-          apt-get install apt-transport-https ca-certificates curl gnupg lsb-release jq &&
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg &&
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null &&
-          apt-get update -y
-          apt-get install docker-ce docker-ce-cli containerd.io
+          apt-get update -y;apt-get install -y jq curl &&
           docker pull itresoldi/evilpetclinic:latest &&
           /workspace/files/malwareCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Sandbox Runtime Scanning of Image       
-        name: 'ubuntu'
+        name: 'gcr.io/cloud-builders/docker'
         entrypoint: "bash"
         args:
         - -c
