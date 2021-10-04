@@ -126,13 +126,13 @@ steps:
         - |
           FQ_DIGEST=$(gcloud container images describe --format 'value(image_summary.fully_qualified_digest)' gcr.io/pcc-dev-sandbox/evilpetclinic)
           /workspace/files/create_attestation.sh \
-          -p "$PROJECT_ID" \
+          -p "$$PROJECT_ID" \
           -i "$${FQ_DIGEST}" \
-          -a "$VULNZ_ATTESTOR" \
-          -v "$VULNZ_KMS_KEY_VERSION" \
-          -k "$VULNZ_KMS_KEY" \
-          -l "$KMS_LOCATION" \
-          -r "$KMS_KEYRING"
+          -a "$$VULNZ_ATTESTOR" \
+          -v "$$VULNZ_KMS_KEY_VERSION" \
+          -k "$$VULNZ_KMS_KEY" \
+          -l "$$KMS_LOCATION" \
+          -r "$$KMS_KEYRING"
 
       - id: Deploy Application 
         name: 'gcr.io/cloud-builders/kubectl'
