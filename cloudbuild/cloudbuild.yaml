@@ -7,11 +7,11 @@ options:
   - BYPASS_SANDBOX=0
   - CLOUDSDK_CONTAINER_CLUSTER="central"
   - CLOUDSDK_COMPUTE_ZONE="us-central1-b"
-  - VULNZ_ATTESTOR="vulnz-attestor"
-  - VULNZ_KMS_KEY_VERSION="1"
-  - VULNZ_KMS_KEY="vulnz-signer"
-  - KMS_LOCATION="us-central1"
-  - KMS_KEYRING="binauthz"
+  - VULNZ_ATTESTOR=vulnz-attestor
+  - VULNZ_KMS_KEY_VERSION=1
+  - VULNZ_KMS_KEY=vulnz-signer
+  - KMS_LOCATION=us-central1
+  - KMS_KEYRING=binauthz
 
 availableSecrets:
   secretManager:
