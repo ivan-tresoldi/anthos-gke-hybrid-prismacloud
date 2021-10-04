@@ -68,9 +68,8 @@ steps:
 
       - id: Build Image
         name: 'gcr.io/cloud-builders/docker'
-        args: [ 'build', '-t', 'us-central1-docker.pkg.dev/pcc-dev-sandbox/evilpetclinic', './app/' ]
-        images:
-        - 'us-central1-docker.pkg.dev/pcc-dev-sandbox/evilpetclinic'
+        args: [ 'build', '-t', 'us-central1-docker.pkg.dev/pcc-dev-sandbox/evilpetclinic', '-f', './app/' ]
+        images: ['us-central1-docker.pkg.dev/pcc-dev-sandbox/evilpetclinic']
 
       - id: Scan Image for Vulnerabilities
         name: 'gcr.io/cloud-builders/docker'
