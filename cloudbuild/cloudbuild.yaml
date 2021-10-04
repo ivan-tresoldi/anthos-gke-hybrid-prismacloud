@@ -12,6 +12,7 @@ options:
   - VULNZ_KMS_KEY="vulnz-signer"
   - KMS_LOCATION="us-central1"
   - KMS_KEYRING="binauthz"
+  - PROJECT_ID="pcc-dev-sandbox"
 
 availableSecrets:
   secretManager:
