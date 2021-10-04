@@ -68,7 +68,7 @@ steps:
 
       - id: Build Image
         name: 'gcr.io/cloud-builders/docker'
-        args: [ 'build', '-t', 'gcr.io/pcc-dev-sandbox/evilpetclinic', '-f', './app/Dockerfile' ]
+        args: [ 'build', '-t', 'gcr.io/pcc-dev-sandbox/evilpetclinic', '/workspace/app/' ]
       
       - id: Push Image to Registry
         name: 'gcr.io/cloud-builders/docker'
