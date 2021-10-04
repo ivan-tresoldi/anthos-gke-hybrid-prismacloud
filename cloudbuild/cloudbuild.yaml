@@ -7,6 +7,11 @@ options:
   - BYPASS_SANDBOX=0
   - CLOUDSDK_CONTAINER_CLUSTER="central"
   - CLOUDSDK_COMPUTE_ZONE="us-central1-b"
+  - VULNZ_ATTESTOR="vulnz-attestor"
+  - VULNZ_KMS_KEY_VERSION="1"
+  - VULNZ_KMS_KEY="vulnz-signer"
+  - KMS_LOCATION="us-central1"
+  - KMS_KEYRING="binauthz"
 
 availableSecrets:
   secretManager:
@@ -21,7 +26,7 @@ availableSecrets:
 
 
 steps:
-      - id: Download twistcli
+      - id: 'Download twistcli'
         name: 'gcr.io/cloud-builders/gcloud'
         entrypoint: "bash"
         args:
@@ -39,7 +44,7 @@ steps:
           checkov --bc-api-key $$BRIDGECREW_API_KEY --directory /workspace --soft-fail
         secretEnv: ['BRIDGECREW_API_KEY']
 
-      - id: Repo Vulnerability scan
+      - id: 'Repo Vulnerability scan'
         name: "ubuntu"
         entrypoint: "bash"
         args:
@@ -50,7 +55,7 @@ steps:
           /workspace/files/repoScan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
-      - id: OSS License Check 
+      - id: 'OSS License Check' 
         name: 'ubuntu'
         entrypoint: "bash"
         args:
@@ -60,31 +65,31 @@ steps:
           /workspace/files/licenseCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
-      - id: Apply security policies (Policy-as-Code) for evilpetclinic Application
+      - id: 'Apply security policies (Policy-as-Code) for evilpetclinic Application'
         name: 'gcr.io/cloud-builders/curl'
         entrypoint: "bash"
         args: ['/workspace/files/addPolicies.sh']
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
-      - id: Build Image
+      - id: 'Build Image'
         name: 'gcr.io/cloud-builders/docker'
         args: [ 'build', '-t', 'gcr.io/pcc-dev-sandbox/evilpetclinic', '/workspace/app/' ]
       
-      - id: Push Image to Registry
+      - id: 'Push Image to Registry'
         name: 'gcr.io/cloud-builders/docker'
         args: [ 'push', 'gcr.io/pcc-dev-sandbox/evilpetclinic' ]
 
-      - id: Scan Image for Vulnerabilities
+      - id: 'Scan Image for Vulnerabilities'
         name: 'gcr.io/cloud-builders/docker'
         entrypoint: "bash"
         args:
         - -c
         - |
           apt-get update -y;apt-get install -y jq curl &&
-          docker pull itresoldi/evilpetclinic:latest &&
+          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic &&
           /workspace/files/scanImage.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-     
+
       - id: Scan Image for Malware using Wildfire
         name: 'gcr.io/cloud-builders/docker'
         entrypoint: "bash"
@@ -111,7 +116,7 @@ steps:
           docker pull itresoldi/evilpetclinic:latest &&
           /workspace/files/sandboxscan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-       
+      
       - id: Deploy Application 
         name: 'gcr.io/cloud-builders/kubectl'
         volumes:
