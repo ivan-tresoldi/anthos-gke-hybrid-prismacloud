@@ -12,7 +12,6 @@ options:
   - VULNZ_KMS_KEY="vulnz-signer"
   - KMS_LOCATION="us-central1"
   - KMS_KEYRING="binauthz"
-  - PROJECT_ID="pcc-dev-sandbox"
 
 availableSecrets:
   secretManager:
@@ -127,7 +126,7 @@ steps:
         - |
           FQ_DIGEST=$(gcloud container images describe --format 'value(image_summary.fully_qualified_digest)' gcr.io/pcc-dev-sandbox/evilpetclinic)
           /workspace/files/create_attestation.sh \
-          -p "$$PROJECT_ID" \
+          -p "$PROJECT_ID" \
           -i "$${FQ_DIGEST}" \
           -a "$$VULNZ_ATTESTOR" \
           -v "$$VULNZ_KMS_KEY_VERSION" \
