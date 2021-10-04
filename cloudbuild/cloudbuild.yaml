@@ -68,11 +68,11 @@ steps:
 
       - id: Build Image
         name: 'gcr.io/cloud-builders/docker'
-        args: [ 'build', '-t', 'gcr.io/pcc-dev-sandbox/evilpetclinic', '-f', './app/' ]
+        args: [ 'build', '-t', 'gcr.io/pcc-dev-sandbox/evilpetclinic', '-f', './app/Dockerfile' ]
       
       - id: Push Image to Registry
         name: 'gcr.io/cloud-builders/docker'
-        args: ['push', 'gcr.io/pcc-dev-sandbox/evilpetclinic']
+        args: [ 'push', 'gcr.io/pcc-dev-sandbox/evilpetclinic' ]
 
       - id: Scan Image for Vulnerabilities
         name: 'gcr.io/cloud-builders/docker'
