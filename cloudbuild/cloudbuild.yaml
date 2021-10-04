@@ -12,7 +12,6 @@ options:
   - VULNZ_KMS_KEY=vulnz-signer
   - KMS_LOCATION=us-central1
   - KMS_KEYRING=binauthz
-  logging: CLOUD_LOGGING_ONLY
 
 availableSecrets:
   secretManager:
