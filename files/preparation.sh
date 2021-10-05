@@ -15,8 +15,7 @@ curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d '{"fe
 
 #Add Policy for Image Vuln. Scanning in CI/CD Pipeline
 curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d "$vulnerability_payload" $TL_CONSOLE/api/v1/policies/vulnerability/ci/images 
-if [ $status = 0 ]
-then
+if [ $status = 0 ]; then
   echo "Successfully installed image vulnerability policies"
 else
   echo "Vulnerability policy install failed, $status"
@@ -24,8 +23,7 @@ fi
 
 #Add Policy for Image Compliance Scanning in CI/CD Pipeline
 curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json' -X PUT -d "$compliance_payload" $TL_CONSOLE/api/v1/policies/compliance/ci/images
-if [ $status = 0 ]
-then
+if [ $status = 0 ]; then
   echo "Successfully installed image vulnerability policies"
 else
   echo "Vulnerability policy install failed, $status"
@@ -33,8 +31,7 @@ fi
 
 #add Policy for OSS license Scan
 curl -k -u $TL_USER:$TL_PASS -H 'Content-Type: application/json;charset=UTF-8' -X PUT -d "$oss_payload" $TL_CONSOLE/api/v1/policies/compliance/ci/coderepos
-if [ $status = 0 ]
-then
+if [ $status = 0 ]; then
   echo "Successfully installed OSS policies"
 else
   echo "Vulnerability policy install failed, $status"
