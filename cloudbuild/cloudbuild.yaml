@@ -70,7 +70,7 @@ steps:
         name: 'gcr.io/cloud-builders/docker'
         args: [ 'push', 'gcr.io/pcc-dev-sandbox/evilpetclinic:latest' ]
 
-      - id: 'Scan Image for Vulnerabilities'
+      - id: 'Scan Image for Vulnerabilities and Malware'
         name: 'gcr.io/cloud-builders/docker'
         entrypoint: "bash"
         args:
@@ -79,17 +79,6 @@ steps:
           apt-get update -y;apt-get install -y jq curl &&
           docker pull gcr.io/pcc-dev-sandbox/evilpetclinic:latest &&
           /workspace/files/scanImage.sh
-        secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
-
-      - id: Scan Image for Malware using Wildfire
-        name: 'gcr.io/cloud-builders/docker'
-        entrypoint: "bash"
-        args:
-        - -c
-        - |
-          apt-get update -y;apt-get install -y jq curl &&
-          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic:latest &&
-          /workspace/files/malwareCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
       - id: Sandbox Runtime Scanning of Image       
