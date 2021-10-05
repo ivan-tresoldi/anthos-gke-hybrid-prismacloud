@@ -41,7 +41,7 @@ steps:
         args:
         - -c
         - |
-          checkov --bc-api-key $$BRIDGECREW_API_KEY --directory /workspace --soft-fail
+          checkov --bc-api-key $$BRIDGECREW_API_KEY --directory /workspace/terraform/ --soft-fail
         secretEnv: ['BRIDGECREW_API_KEY']
 
       - id: 'Repo Vulnerability scan'
@@ -111,8 +111,6 @@ steps:
         - -c
         - |
           apt-get update -y;apt-get install -y jq curl docker-ce docker-ce-cli containerd.io &&
-          echo "Test write on /tmp" > /tmp/filetmp.txt &&
-          cat /tmp/filetmp.txt
           docker pull gcr.io/pcc-dev-sandbox/evilpetclinic &&
           /workspace/files/sandboxscan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
