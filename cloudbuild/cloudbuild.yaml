@@ -73,11 +73,11 @@ steps:
 
       - id: 'Build Image'
         name: 'gcr.io/cloud-builders/docker'
-        args: [ 'build', '-t', 'gcr.io/pcc-dev-sandbox/evilpetclinic', '/workspace/app/' ]
+        args: [ 'build', '-t', 'gcr.io/pcc-dev-sandbox/evilpetclinic:latest', '/workspace/app/' ]
       
       - id: 'Push Image to Registry'
         name: 'gcr.io/cloud-builders/docker'
-        args: [ 'push', 'gcr.io/pcc-dev-sandbox/evilpetclinic' ]
+        args: [ 'push', 'gcr.io/pcc-dev-sandbox/evilpetclinic:latest' ]
 
       - id: 'Scan Image for Vulnerabilities'
         name: 'gcr.io/cloud-builders/docker'
@@ -86,7 +86,7 @@ steps:
         - -c
         - |
           apt-get update -y;apt-get install -y jq curl &&
-          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic &&
+          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic:latest &&
           /workspace/files/scanImage.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
@@ -97,7 +97,7 @@ steps:
         - -c
         - |
           apt-get update -y;apt-get install -y jq curl &&
-          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic &&
+          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic:latest &&
           /workspace/files/malwareCheck.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
 
@@ -111,7 +111,7 @@ steps:
         - -c
         - |
           apt-get update -y;apt-get install -y jq curl docker-ce docker-ce-cli containerd.io &&
-          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic &&
+          docker pull gcr.io/pcc-dev-sandbox/evilpetclinic:latest &&
           /workspace/files/sandboxscan.sh
         secretEnv: ['TL_USER', 'TL_PASS', 'TL_CONSOLE']
       
@@ -122,7 +122,7 @@ steps:
         - -xe
         - -c
         - |
-          FQ_DIGEST=$(gcloud container images describe --format 'value(image_summary.fully_qualified_digest)' gcr.io/pcc-dev-sandbox/evilpetclinic)
+          FQ_DIGEST=$(gcloud container images describe --format 'value(image_summary.fully_qualified_digest)' gcr.io/pcc-dev-sandbox/evilpetclinic:latest)
           /workspace/files/create_attestation.sh \
           -p $PROJECT_ID \
           -i $${FQ_DIGEST} \
