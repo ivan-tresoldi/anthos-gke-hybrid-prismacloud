@@ -122,7 +122,7 @@ steps:
         - -xe
         - -c
         - |
-          FQ_DIGEST=$(gcloud container images describe --format 'value(image_summary.fully_qualified_digest)' gcr.io/pcc-dev-sandbox/gcr.io/pcc-dev-sandbox/evilpetclinic:latest)
+          FQ_DIGEST=$(gcloud container images describe --format 'value(image_summary.fully_qualified_digest)' gcr.io/pcc-dev-sandbox/evilpetclinic@sha256:00250a52aaceef21cc831748ec3fa1a324340713edef3af3d1a1bec0b591f500)
           /workspace/files/create_attestation.sh \
           -p $PROJECT_ID \
           -i $${FQ_DIGEST} \

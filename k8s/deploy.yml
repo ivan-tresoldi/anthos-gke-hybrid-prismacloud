@@ -26,7 +26,7 @@ spec:
         app: evilpetclinic
     spec:
       containers:
-      - image: gcr.io/pcc-dev-sandbox/gcr.io/pcc-dev-sandbox/evilpetclinic:latest
+      - image: gcr.io/pcc-dev-sandbox/evilpetclinic@sha256:00250a52aaceef21cc831748ec3fa1a324340713edef3af3d1a1bec0b591f500
         name: evilpetclinic
         imagePullPolicy: IfNotPresent
         resources: {}
