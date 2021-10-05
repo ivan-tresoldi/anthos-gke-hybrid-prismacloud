@@ -1,5 +1,5 @@
 #Wait for LB to come up
-sleep 10
+sleep 30
 
 SVC=$(kubectl get svc -n evil|grep service| awk '{ print $4 }')
 
