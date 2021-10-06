@@ -116,7 +116,7 @@ if gcloud container binauthz attestations list \
       | jq '.[0].kind' \
       | grep 'ATTESTATION'
 then
-  echo "Image has already been attested."
+  echo "Image has been attested."
   exit 0
 fi
 
